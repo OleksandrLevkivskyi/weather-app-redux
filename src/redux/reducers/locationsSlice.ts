@@ -1,5 +1,4 @@
 import { createSlice, current, PayloadAction } from "@reduxjs/toolkit"
-import { WritableDraft } from "immer/dist/internal";
 import { WeatherLocation } from "../../model/Weather"
 
 
@@ -21,8 +20,10 @@ export const locationsSlice = createSlice({
     name: 'locations', 
     initialState,
     reducers: {
-        setLocations(state, action: PayloadAction<WeatherLocation>){
-            state.locations = [...state.locations, action.payload]
+        setLocations(state, action: PayloadAction<{locations: WeatherLocation[]}>){
+            console.log(current(state));
+            
+            state.locations = action.payload.locations;
             state.error = '';
             state.warning = '';
             current(state)
@@ -38,6 +39,5 @@ export const locationsSlice = createSlice({
     
 })
 
-// export const liveState = (state: LocationsState)=>state.locations;
-// console.log(liveState)
+export const { setLocations, setEror, setWarning } = locationsSlice.actions
 export default locationsSlice.reducer;

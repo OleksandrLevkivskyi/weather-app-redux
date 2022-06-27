@@ -1,11 +1,13 @@
-import React, {FC, useState, useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import { LocationSearch } from "../components/LocationSearch"
 import { LocationCard } from '../components/LocationCard'
-import {WeatherConditions, WeatherLocation} from "../model/Weather";
+import {WeatherLocation} from "../model/Weather";
 import {searchLocation} from "../services/WeatherService";
 import {Alert} from "../components/Alerts";
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { addLocation } from '../redux/reducers/ActionCreators';
+import { setEror, setLocations, setWarning } from '../redux/reducers/locationsSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 interface HomeProps {
     // locations: WeatherLocation[];
@@ -19,39 +21,39 @@ const Home: FC<HomeProps> = ({
   setCurrentLocation
 }) => {
   const dispatch = useAppDispatch()
-  const {error, warning, locations} = useAppSelector(state => state.locationsReducer)
-  // const [error, setError] = useState('');
-  // const [warning, setWarning] = useState(''); 
+  const {error, warning} = useAppSelector(state => state.locations)
+  const locations: WeatherLocation[] = useSelector((state: RootState) => state.locations.locations);
 
-  // useEffect(() => {
-  //   window.localStorage.setItem("locations", JSON.stringify(locations));
-  // }, [locations]);
+  useEffect(() => {
+    if(!locations.length) {
+      return;
+    }
+    window.localStorage.setItem("locations", JSON.stringify(locations));
+  }, [locations]);
 
 
-  // const resetAlerts = () => {
-  //   setError('');
-  //   setWarning('');
-  // }
+  const resetAlerts = () => {
+    dispatch(setEror(''));
+    dispatch(setWarning(''));
+  }
 
-  // let addLocation = async (term: string) => {
-  //   resetAlerts();
-  //   const location = await searchLocation(term);
+  let addLocation = async (term: string) => {
+    resetAlerts();
+    const location = await searchLocation(term);
 
-  //   if (!location) {
-  //     setError(`No location found called '${term}'`);
-  //   } else if (locations.find(item => item.id === location.id)) {
-  //     setWarning(`Location '${term}' is already in the list.`);
-  //   } else {
-  //     setLocations([location, ...locations]);
-  //   }
-  // };
+    if (!location) {
+      dispatch(setEror(`No location found called '${term}'`));
+    } else if (locations?.find(item => item.id === location.id)) {
+      dispatch(setWarning(`Location '${term}' is already in the list.`));
+    } else {
+      dispatch(setLocations({locations: [...locations, location]}));
+    }
+  };
 
-//   useEffect(() => {
-// }, [locations]);
-
-  let addCity =(term: string)=>{
-    dispatch(addLocation(term))
+  let addCity =(term: string) => {
+    console.log(locations);
     
+    addLocation(term)
   }
 
   // const cardSelect= (location) => {
