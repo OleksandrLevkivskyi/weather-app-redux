@@ -1,9 +1,8 @@
-import React, {FC, useEffect} from "react";
+import React, {FC} from "react";
 import Grid from '@mui/material/Grid';
 import { WeatherLocation} from "../model/Weather";
 import { WeatherCard } from "./WeatherCard";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { addLocation } from "../redux/reducers/ActionCreators";
+import { useAppSelector } from "../hooks/redux";
 
 
 
@@ -20,7 +19,7 @@ export const LocationCard: FC<LocationCardProps> = ({
   //setLocations
 }) =>{
 
-  const {locations, location} = useAppSelector(state => state.locationsReducer)
+  const {locations, location} = useAppSelector(state => state.locations)
   // const {location} = useAppSelector(state => state.locationsReducer)
 
   // const dispatch = useAppDispatch()
@@ -51,7 +50,6 @@ export const LocationCard: FC<LocationCardProps> = ({
                                   //name = {location.name} 
                                   locations ={locations} 
                                   location ={location}
-                                  //setLocations={setLocations}
                                   /> 
             </Grid>
         )}
