@@ -1,25 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {FC, useState, useEffect} from 'react';
 import './App.css';
+import { LocationSearch } from "./components/LocationSearch"
+import { LocationCard } from './components/LocationCard'
+import {WeatherConditions, WeatherLocation} from "./model/Weather";
+import {searchLocation} from "./services/WeatherService";
+import {Alert} from "./components/Alerts";
+import { Routes, Route, } from 'react-router-dom';
+import City from './pages/City';
+import Home from './pages/Home';
 
-function App() {
+const App: FC = () => {
+  // const [locations, setLocations] = useState<WeatherLocation[]>(
+  //   () => {
+  //   const saved = localStorage.getItem("locations")|| '[]';
+  //   const initialValue = JSON.parse(saved);
+  //   return initialValue || [];
+  // });
+
+  const [currentLocation, setCurrentLocation] = useState<WeatherLocation | null>(
+    () => {
+      const saved = localStorage.getItem("currentLocation")|| '[]';
+      const initialValue = JSON.parse(saved);
+      return initialValue || null;
+    });  
+    // console.log(locations);
+    //console.log(currentLocation);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Routes>
+        <Route path="/:name" element={
+          <City current={currentLocation}/>} />
+        <Route path="/" element={
+          <Home 
+                // locations={locations}
+                // setLocations={setLocations}
+                setCurrentLocation={setCurrentLocation}
+                />} />
+      </Routes>
     </div>
+
   );
 }
 
