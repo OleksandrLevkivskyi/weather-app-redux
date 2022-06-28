@@ -1,10 +1,6 @@
 import React, {FC, useState, useEffect} from 'react';
 import './App.css';
-import { LocationSearch } from "./components/LocationSearch"
-import { LocationCard } from './components/LocationCard'
-import {WeatherConditions, WeatherLocation} from "./model/Weather";
-import {searchLocation} from "./services/WeatherService";
-import {Alert} from "./components/Alerts";
+import {WeatherLocation} from "./model/Weather";
 import { Routes, Route, } from 'react-router-dom';
 import City from './pages/City';
 import Home from './pages/Home';

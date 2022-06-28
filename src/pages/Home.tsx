@@ -5,7 +5,7 @@ import {WeatherLocation} from "../model/Weather";
 import {searchLocation} from "../services/WeatherService";
 import {Alert} from "../components/Alerts";
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { setEror, setLocations, setWarning } from '../redux/reducers/locationsSlice';
+import { getLocationData, setEror, setLocations, setWarning } from '../redux/reducers/locationsSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
@@ -31,36 +31,13 @@ const Home: FC<HomeProps> = ({
     window.localStorage.setItem("locations", JSON.stringify(locations));
   }, [locations]);
 
-
-  const resetAlerts = () => {
-    dispatch(setEror(''));
-    dispatch(setWarning(''));
-  }
-
-  let addLocation = async (term: string) => {
-    resetAlerts();
-    const location = await searchLocation(term);
-
-    if (!location) {
-      dispatch(setEror(`No location found called '${term}'`));
-    } else if (locations?.find(item => item.id === location.id)) {
-      dispatch(setWarning(`Location '${term}' is already in the list.`));
-    } else {
-      dispatch(setLocations({locations: [...locations, location]}));
-    }
-  };
-
-  let addCity =(term: string) => {
-    console.log(locations);
-    
-    addLocation(term)
+  let addCity = (term: string) => {
+    dispatch(getLocationData(term))
   }
 
   // const cardSelect= (location) => {
   //   setCurrentLocation(location)
   // }
-
-  //console.log(locations)
 
   return (
     <div className="App">
