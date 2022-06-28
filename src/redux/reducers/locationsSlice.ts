@@ -1,8 +1,10 @@
-import { createSlice, current, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, current, PayloadAction } from "@reduxjs/toolkit"
 import { WeatherLocation } from "../../model/Weather"
+import { searchLocation } from "../../services/WeatherService";
+import { RootState } from "../store";
 
 
-interface LocationsState{
+interface LocationsState {
     locations: WeatherLocation[];
     error: string;
     warning: string;
@@ -21,8 +23,6 @@ export const locationsSlice = createSlice({
     initialState,
     reducers: {
         setLocations(state, action: PayloadAction<{locations: WeatherLocation[]}>){
-            console.log(current(state));
-            
             state.locations = action.payload.locations;
             state.error = '';
             state.warning = '';
@@ -38,6 +38,25 @@ export const locationsSlice = createSlice({
     }
     
 })
+
+export const getLocationData = createAsyncThunk(
+    'locationData/getLocationData',
+    async (term: string, { dispatch, getState }) => {
+        dispatch(setEror(''));
+        dispatch(setWarning(''));
+        const location = await searchLocation(term);
+        const state = getState() as RootState;
+        const locations = state.locations.locations;
+        
+        if (!location) {
+          dispatch(setEror(`No location found called '${term}'`));
+        } else if (locations?.find(item => item.id === location.id)) {
+          dispatch(setWarning(`Location '${term}' is already in the list.`));
+        } else {
+          dispatch(setLocations({locations: [...locations, location]}));
+        }
+    }
+  );
 
 export const { setLocations, setEror, setWarning } = locationsSlice.actions
 export default locationsSlice.reducer;
