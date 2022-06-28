@@ -21,7 +21,7 @@ export async function searchLocation(term: string): Promise<WeatherLocation | un
   
 }
 
-export async function readWeather(locationId: number): Promise<Weather> {
+export async function readWeather(locationId: number): Promise<WeatherLocation> {
     const current = await fetch(`${server}/weather?id=${locationId}&${keyQuery}&units=metric`);
   
     if (current.status !== 200) throw new Error('Failed to read location data');
@@ -29,7 +29,7 @@ export async function readWeather(locationId: number): Promise<Weather> {
     return await current.json();
   }
 
-  export async function readForecast(locationId: number | null): Promise<Weather[]> {
+  export async function readForecast(locationId: number | null): Promise<WeatherLocation[]> {
     const forecast = await fetch(`${server}/forecast?id=${locationId}&${keyQuery}&units=metric&cnt=8`);
   
     if (forecast.status !== 200) throw new Error('Failed to read location data');

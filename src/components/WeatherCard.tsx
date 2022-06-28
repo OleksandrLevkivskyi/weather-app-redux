@@ -10,7 +10,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { NavLink  } from "react-router-dom";
-import { useAppSelector } from "../hooks/redux";
+import { useAppDispatch } from "../hooks/redux";
+import { updateLocationData } from "../redux/reducers/locationsSlice";
 
 const linkStyle = {
     textDecoration: "none",
@@ -28,8 +29,10 @@ export const WeatherCard: FC<WeatherCardProps> = ({
     location, 
     //setLocations
 }) => {
-    const [weather, setWeather] = useState<Weather | null>(null);
+    const [weather, setWeather] = useState<WeatherLocation | null>(null);
     const [update, setUpdate] = useState(false);
+
+    const dispatch = useAppDispatch();
     //const {location} = useAppSelector(state => state.locationsReducer)
 
     useEffect(() => {
@@ -54,11 +57,13 @@ export const WeatherCard: FC<WeatherCardProps> = ({
         return locations.splice(locations.indexOf(location), 1) 
     }
 
-    const updateItem = (event: any) =>{
-        setWeather(null)
-        setUpdate(false)
-        console.log(update)
+    const updateItem = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, weather: WeatherLocation) => {
         event.stopPropagation()
+        dispatch(updateLocationData(weather));
+        // setWeather(null)
+        // setUpdate(false)
+        // console.log(update)
+   
     }
 
     const handleDelete = (event: any) => {
@@ -112,7 +117,7 @@ export const WeatherCard: FC<WeatherCardProps> = ({
                 </NavLink >
                     <CardActions>
                         <Button size="small"  
-                                onClick={(event)=> updateItem(event)} 
+                                onClick={(event)=> updateItem(event, weather)} 
                                 >Update</Button>
                         <Button size="small" 
                                 onClick={(event)=> 

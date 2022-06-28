@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, current, PayloadAction } from "@reduxjs/toolkit"
-import { WeatherLocation } from "../../model/Weather"
+import { Weather, WeatherLocation } from "../../model/Weather"
 import { searchLocation } from "../../services/WeatherService";
 import { RootState } from "../store";
 
@@ -34,6 +34,14 @@ export const locationsSlice = createSlice({
         setWarning(state, action: PayloadAction<string>) {
             state.warning = action.payload
         },
+        updateLocationData(state, action: PayloadAction<WeatherLocation>) {
+            state.locations = state.locations.map(item => {
+                if (item.id === action.payload.id) {
+                    return action.payload;
+                }
+                return item;
+            });
+        },
         
     }
     
@@ -54,6 +62,16 @@ export const getLocationData = createAsyncThunk(
           dispatch(setWarning(`Location '${term}' is already in the list.`));
         } else {
           dispatch(setLocations({locations: [...locations, location]}));
+        }
+    }
+  );
+
+  export const updateLocationData = createAsyncThunk(
+    'locationData/getLocationData',
+    async (weather: WeatherLocation, { dispatch, getState }) => {
+        const location = await searchLocation(weather.name);
+        if (location !== undefined) {
+            dispatch(updateLocationData(location));
         }
     }
   );

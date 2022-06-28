@@ -1,13 +1,13 @@
 import { relative } from "node:path/win32";
 import React, {FC, useState} from "react";
-import {Weather} from "../model/Weather";
+import {WeatherLocation} from "../model/Weather";
 import {getIconUrl} from "../services/WeatherService";
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 interface CityCardProps {
-  weather: Weather;
+  weather: WeatherLocation;
 }
 
 export const CityCard: FC<CityCardProps> = ({weather}) =>{

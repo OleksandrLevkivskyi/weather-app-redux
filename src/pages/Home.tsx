@@ -2,10 +2,9 @@ import React, {FC, useEffect} from 'react';
 import { LocationSearch } from "../components/LocationSearch"
 import { LocationCard } from '../components/LocationCard'
 import {WeatherLocation} from "../model/Weather";
-import {searchLocation} from "../services/WeatherService";
 import {Alert} from "../components/Alerts";
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { getLocationData, setEror, setLocations, setWarning } from '../redux/reducers/locationsSlice';
+import { getLocationData } from '../redux/reducers/locationsSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
@@ -46,9 +45,7 @@ const Home: FC<HomeProps> = ({
       <Alert message={warning}/>
       <h1>Locations</h1>
       <LocationCard 
-                    //locations={locations}
                      onSelect={location => setCurrentLocation(location)}
-                    //  setLocations={setLocations}
       />
       {/* <WeatherSummary location={currentLocation}/> */}
     </div>

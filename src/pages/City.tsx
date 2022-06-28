@@ -9,7 +9,7 @@ interface CityProps {
   }
 
 const City: FC<CityProps> = ({current}) => {
-    const [forecast, setForecast] = useState<Weather[] | null>(null);
+    const [forecast, setForecast] = useState<WeatherLocation[] | null>(null);
 
     useEffect(() => {
         (async function () {
@@ -27,8 +27,6 @@ const City: FC<CityProps> = ({current}) => {
         window.localStorage.setItem("currentLocation", JSON.stringify(current));
       }, [current]);
 
-      console.log(current);
-      console.log(forecast)
       localStorage.removeItem("forecast");
 
       if (!current || !forecast) return null; 
