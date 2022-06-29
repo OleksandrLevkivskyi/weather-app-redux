@@ -9,14 +9,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
 interface HomeProps {
-    // locations: WeatherLocation[];
-    // setLocations: (locations: WeatherLocation[]) => void;
     setCurrentLocation: (location: WeatherLocation | null) => void
   }
 
 const Home: FC<HomeProps> = ({
-  // locations, 
-  // setLocations, 
   setCurrentLocation
 }) => {
   const dispatch = useAppDispatch()
@@ -34,10 +30,6 @@ const Home: FC<HomeProps> = ({
     dispatch(getLocationData(term))
   }
 
-  // const cardSelect= (location) => {
-  //   setCurrentLocation(location)
-  // }
-
   return (
     <div className="App">
       <LocationSearch onSearch={addCity}/>
@@ -47,7 +39,6 @@ const Home: FC<HomeProps> = ({
       <LocationCard 
                      onSelect={location => setCurrentLocation(location)}
       />
-      {/* <WeatherSummary location={currentLocation}/> */}
     </div>
 
   );
