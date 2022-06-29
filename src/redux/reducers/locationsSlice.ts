@@ -34,7 +34,7 @@ export const locationsSlice = createSlice({
         setWarning(state, action: PayloadAction<string>) {
             state.warning = action.payload
         },
-        updateLocationData(state, action: PayloadAction<WeatherLocation>) {
+        updateLocation(state, action: PayloadAction<WeatherLocation>) {
             state.locations = state.locations.map(item => {
                 if (item.id === action.payload.id) {
                     return action.payload;
@@ -42,7 +42,11 @@ export const locationsSlice = createSlice({
                 return item;
             });
         },
-        
+
+        deleteLocation(state, action: PayloadAction<number>) {
+            state.locations = state.locations.filter(item => item.id !== action.payload);
+            window.localStorage.setItem("locations", JSON.stringify(state.locations));
+        }
     }
     
 })
@@ -71,10 +75,11 @@ export const getLocationData = createAsyncThunk(
     async (weather: WeatherLocation, { dispatch, getState }) => {
         const location = await searchLocation(weather.name);
         if (location !== undefined) {
-            dispatch(updateLocationData(location));
+            dispatch(updateLocation(location));
         }
+        // return console.log(location)
     }
   );
 
-export const { setLocations, setEror, setWarning } = locationsSlice.actions
+export const { setLocations, setEror, setWarning, updateLocation, deleteLocation } = locationsSlice.actions
 export default locationsSlice.reducer;

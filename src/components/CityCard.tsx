@@ -1,4 +1,3 @@
-import { relative } from "node:path/win32";
 import React, {FC, useState} from "react";
 import {WeatherLocation} from "../model/Weather";
 import {getIconUrl} from "../services/WeatherService";
@@ -56,11 +55,9 @@ export const CityCard: FC<CityCardProps> = ({weather}) =>{
         marginBottom: weather.main.temp / 2 + 'vh',
         position: 'absolute' as 'absolute',
         bottom: '25vh', 
-        //left: '38%',
         width: '100%',
         height: '40px',
         backgroundColor: changeTemperature()
-        // marginRight: '-50%'
     }
 
     const parent = {
@@ -82,27 +79,15 @@ export const CityCard: FC<CityCardProps> = ({weather}) =>{
                 <Typography variant="subtitle1" color="text.secondary">
                     Min: {weather.main.temp_min}°C 
                 </Typography>
-                {/* <Typography variant="subtitle1" color="text.secondary">
-                    
-                </Typography> */}
                 <Typography variant="subtitle1" color="text.secondary">
                     Max. {weather.main.temp_max}°C
                 </Typography>
-                {/* <Typography variant="subtitle1" color="text.secondary">
-                    
-                </Typography> */}
                 <Typography variant="subtitle1" color="text.secondary">
                     Feels like: {weather.main.feels_like}°C
                 </Typography>
-                {/* <Typography variant="subtitle1" color="text.secondary">
-                     
-                </Typography> */}
                 <Typography variant="body1" color="text.secondary">
                     Humidity: {weather.main.humidity}%
                 </Typography>
-                {/* <Typography variant="body1" color="text.secondary">
-                    
-                </Typography> */}
             </Box>
                 {weather.weather.map(condition =>
                     <Box key={condition.id} >

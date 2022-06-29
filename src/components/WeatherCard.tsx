@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { NavLink  } from "react-router-dom";
 import { useAppDispatch } from "../hooks/redux";
-import { updateLocationData } from "../redux/reducers/locationsSlice";
+import { deleteLocation, updateLocationData } from "../redux/reducers/locationsSlice";
 
 const linkStyle = {
     textDecoration: "none",
@@ -21,16 +21,13 @@ const linkStyle = {
 interface WeatherCardProps {
     locations: WeatherLocation[];
     location: WeatherLocation;
-    // setLocations: (locations: WeatherLocation[]) => void
 }
 
 export const WeatherCard: FC<WeatherCardProps> = ({ 
     locations, 
     location, 
-    //setLocations
 }) => {
     const [weather, setWeather] = useState<WeatherLocation | null>(null);
-    const [update, setUpdate] = useState(false);
 
     const dispatch = useAppDispatch();
     //const {location} = useAppSelector(state => state.locationsReducer)
@@ -42,41 +39,28 @@ export const WeatherCard: FC<WeatherCardProps> = ({
                 readWeather(location.id),
               ]);
               setWeather(weather);
-              setUpdate(true)
             }
           })()
-    }, [location, update]);
+    }, [location]);   
 
     if (!location || !weather) return null;
+
 
     function convertUnixTimeToDate(unixUtc: number): Date {
         return new Date(unixUtc * 1000);
       }
 
-    const deleteItem = () =>{
-        return locations.splice(locations.indexOf(location), 1) 
-    }
-
     const updateItem = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, weather: WeatherLocation) => {
         event.stopPropagation()
         dispatch(updateLocationData(weather));
-        // setWeather(null)
-        // setUpdate(false)
-        // console.log(update)
    
     }
 
-    const handleDelete = (event: any) => {
-        //localStorage.removeItem("locations");
-        deleteItem();
-        //setLocations(locations);
-        window.localStorage.setItem("locations", JSON.stringify(locations));
-        console.log(update);
-        //event.stopPropagation()
+    const handleDelete = () => {
+        dispatch(deleteLocation(location.id))
     }
-    // console.log(weather)
-    // console.log(locations)
-    // console.log(location)
+
+    console.log(weather.name)
 
     return (
         <div>            
@@ -120,9 +104,8 @@ export const WeatherCard: FC<WeatherCardProps> = ({
                                 onClick={(event)=> updateItem(event, weather)} 
                                 >Update</Button>
                         <Button size="small" 
-                                onClick={(event)=> 
-                                //locations.splice(locations.indexOf(location), 1) 
-                                handleDelete(event)
+                                onClick={()=> 
+                                handleDelete()
                                 }>Delete</Button>
                     </CardActions>
             </Card>          

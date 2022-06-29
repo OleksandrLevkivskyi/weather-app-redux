@@ -22,8 +22,8 @@ const App: FC = () => {
 
   const [currentLocation, setCurrentLocation] = useState<WeatherLocation | null>(
     () => {
-      const saved = localStorage.getItem("currentLocation")|| '[]';
-      const initialValue = JSON.parse(saved);
+      const saved = localStorage.getItem("currentLocation");
+      const initialValue = saved ? JSON.parse(saved) : [];
       return initialValue || null;
     });  
   return (
