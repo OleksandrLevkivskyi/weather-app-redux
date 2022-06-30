@@ -4,17 +4,13 @@ import { WeatherLocation} from "../model/Weather";
 import { WeatherCard } from "./WeatherCard";
 import { useAppSelector } from "../hooks/redux";
 
-interface LocationCardProps {
- 
-  
+interface LocationCardProps {  
   onSelect: (location: WeatherLocation) => void;
 }
 
-export const LocationCard: FC<LocationCardProps> = ({
-  onSelect, 
-}) =>{
+export const LocationCard: FC<LocationCardProps> = ({onSelect}) =>{
 
-  const {locations, location} = useAppSelector(state => state.locations)
+  const {locations} = useAppSelector(state => state.locations)
  
  return(
     <div>  
@@ -22,13 +18,12 @@ export const LocationCard: FC<LocationCardProps> = ({
     <React.Fragment>
         <Grid container spacing={{ xs: 4, md: 3 }} >
             {locations?.map((location) =>
-            <Grid item xs={2} sm={2} md={2} key={location.id} 
+            <Grid item xs={2} sm={2} md={2}  key={location.id}
                   onClick={() => onSelect(location)}
             >          
-                    <WeatherCard  key={location.id}
-                                  locations ={locations} 
+                    <WeatherCard  key={location.id}                              
                                   location ={location}
-                                  /> 
+                    /> 
             </Grid>
         )}
         </Grid>

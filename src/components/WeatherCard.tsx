@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
-import {Weather, WeatherLocation} from "../model/Weather";
+import { WeatherLocation} from "../model/Weather";
 import {readWeather} from "../services/WeatherService";
 import {getIconUrl} from "../services/WeatherService";
 import Card from '@mui/material/Card';
@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { NavLink  } from "react-router-dom";
-import { useAppDispatch } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { deleteLocation, updateLocationData } from "../redux/reducers/locationsSlice";
 
 const linkStyle = {
@@ -19,18 +19,13 @@ const linkStyle = {
   };
 
 interface WeatherCardProps {
-    locations: WeatherLocation[];
     location: WeatherLocation;
 }
 
-export const WeatherCard: FC<WeatherCardProps> = ({ 
-    locations, 
-    location, 
-}) => {
+export const WeatherCard: FC<WeatherCardProps> = ({location}) => {
     const [weather, setWeather] = useState<WeatherLocation | null>(null);
-
+    
     const dispatch = useAppDispatch();
-    //const {location} = useAppSelector(state => state.locationsReducer)
 
     useEffect(() => {
         (async function () {
@@ -40,7 +35,7 @@ export const WeatherCard: FC<WeatherCardProps> = ({
               ]);
               setWeather(weather);
             }
-          })()
+          })()        
     }, [location]);   
 
     if (!location || !weather) return null;
@@ -60,23 +55,20 @@ export const WeatherCard: FC<WeatherCardProps> = ({
         dispatch(deleteLocation(location.id))
     }
 
-    console.log(weather.name)
-
     return (
         <div>            
             <Card >
                 <NavLink   to={`/${location.name}`}  style={linkStyle}>
                     {weather.weather.map(condition =>
-                    <Box>
+                    <Box  key={condition.id}>
                         <CardMedia
-                            key={condition.id}
                             component="img"
                             alt={condition.main}                    
                             src={getIconUrl(condition.icon)}
                             height='100px'
                             sx={{ maxWidth: 100,  margin: '0 auto'}}
                         />
-                        <Typography gutterBottom variant="h6" component="div">
+                        <Typography gutterBottom variant="h6" component="div" >
                             {condition.description}
                         </Typography>
                     </Box>           

@@ -1,40 +1,30 @@
-import React, {FC, useState, useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import './App.css';
-import {WeatherLocation} from "./model/Weather";
 import { Routes, Route, } from 'react-router-dom';
 import City from './pages/City';
 import Home from './pages/Home';
 import { useAppDispatch } from './hooks/redux';
-import { setLocations } from './redux/reducers/locationsSlice';
+import { setLocations, setLocation } from './redux/reducers/locationsSlice';
 
 const App: FC = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    getLocationsFromLocalStorage();
+    getDataFromLocalStorage("locations", [], setLocations);
+    getDataFromLocalStorage("current", null, setLocation);
   }, []);
 
-  const getLocationsFromLocalStorage = () => {
-    const saved = localStorage.getItem("locations");
-    const initialValue = saved ? JSON.parse(saved) : [];
-    dispatch(setLocations({locations: initialValue}))
+  const getDataFromLocalStorage = (key: string, atr: any, func: any) => {
+    const saved = localStorage.getItem(key);
+    const initialValue = saved ? JSON.parse(saved) : atr;
+    dispatch(func(initialValue))
   }
 
-  const [currentLocation, setCurrentLocation] = useState<WeatherLocation | null>(
-    () => {
-      const saved = localStorage.getItem("currentLocation");
-      const initialValue = saved ? JSON.parse(saved) : [];
-      return initialValue || null;
-    });  
   return (
     <div className="App">
       <Routes>
-        <Route path="/:name" element={
-          <City current={currentLocation}/>} />
-        <Route path="/" element={
-          <Home 
-                setCurrentLocation={setCurrentLocation}
-                />} />
+        <Route path="/:name" element={<City />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </div>
 
