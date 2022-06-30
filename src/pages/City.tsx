@@ -1,15 +1,13 @@
-import React, {FC, useState, useEffect} from 'react';
-import { Weather, WeatherLocation } from '../model/Weather';
+import {FC, useState, useEffect} from 'react';
+import { WeatherLocation } from '../model/Weather';
 import {readForecast} from "../services/WeatherService";
 import { CityCard } from "../components/CityCard"
+import { useAppSelector } from '../hooks/redux';
 
 
-interface CityProps {
-    current: WeatherLocation | null;
-  }
-
-const City: FC<CityProps> = ({current}) => {
+const City: FC = () => {
     const [forecast, setForecast] = useState<WeatherLocation[] | null>(null);
+    const current = useAppSelector(state => state.locations.location)
 
     useEffect(() => {
         (async function () {
@@ -23,18 +21,18 @@ const City: FC<CityProps> = ({current}) => {
           })()
     }, [current]);
 
-    useEffect(() => {
-        window.localStorage.setItem("currentLocation", JSON.stringify(current));
+   useEffect(() => {
+    if(!current) {
+      return;
+    }
+        window.localStorage.setItem("current", JSON.stringify(current));
       }, [current]);
-
-      localStorage.removeItem("forecast");
 
       if (!current || !forecast) return null; 
       
     const style = {
       display: 'flex', 
-      justifyContent:'сenter',
-      
+      justifyContent:'сenter',      
     }
 
     const container = {

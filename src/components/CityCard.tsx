@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import {FC , useState} from "react";
 import {WeatherLocation} from "../model/Weather";
 import {getIconUrl} from "../services/WeatherService";
 import CardMedia from '@mui/material/CardMedia';
@@ -52,7 +52,7 @@ export const CityCard: FC<CityCardProps> = ({weather}) =>{
     }
 
     const style = {
-        marginBottom: weather.main.temp / 2 + 'vh',
+        marginBottom: (weather.main.temp / 2)-3 + 'vh',
         position: 'absolute' as 'absolute',
         bottom: '25vh', 
         width: '100%',
